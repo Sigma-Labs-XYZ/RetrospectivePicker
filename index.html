@@ -1,9 +1,208 @@
 <!DOCTYPE html>
-<html>
-<body>
-
-<h1>My First Heading</h1>
-<p>My first paragraph.</p>
-
-</body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Retrospective Picker - Sigma Labs XYZ</title>
+    <style>
+      body {
+        background: rgb(228, 81, 28);
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+      }
+      #sigma-labs-banner {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 40%;
+        /* border: 5px solid black; */
+      }
+      #main-title {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+        color: white;
+        /* text-align: center; */
+        font-weight: 600;
+        /* border: 5px solid black; */
+      }
+      .form-input {
+        /* border: 5px solid black; */
+        width: 20vw;
+        padding: 0.5%;
+        margin: 5px 0px;
+        border: 5px solid white;
+        border-radius: 4px;
+      }
+      .form-button {
+        background: lightblue;
+        border: 1px solid black;
+        border-radius: 4px;
+        padding: 0.5%;
+        margin: 10px 0px;
+      }
+      #selected-individual {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 5vw;
+        color: black;
+        /* text-align: center; */
+        font-weight: 600;
+        /* border: 5px solid rgb(0, 0, 255); */
+      }
+      .instructions {
+        margin: 0px 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <img
+      id="sigma-labs-banner"
+      src="https://media-exp1.licdn.com/dms/image/C4E1BAQFU9Eaybee7yQ/company-background_10000/0/1613596086628?e=2159024400&v=beta&t=0Osa22BXC9DS8r_Q-x3gbb7a3Czrjam8VN2UvYFiOX8"
+    />
+    <h1 id="main-title">Retrospective Picker</h1>
+    <p class="instructions" style="text-decoration: underline">Shortcuts</p>
+    <p class="instructions">Add Individual: Enter</p>
+    <p class="instructions">Choose Random Individual: Shift + Enter</p>
+    <p id="selected-individual"></p>
+    <form id="main-form">
+      <div id="main-form-inputs">
+        <input type="text" class="form-input" /><br />
+        <input type="text" class="form-input" />
+      </div>
+      <input
+        type="submit"
+        value="Choose Random Individual"
+        class="form-button"
+        id="form-submit"
+      />
+      <br />
+      <input
+        type="button"
+        value="Add Individual"
+        class="form-button"
+        id="form-add-input"
+      />
+      <input type="reset" value="Reset" class="form-button" id="form-reset" />
+      <br />
+      <input
+        type="button"
+        value="Load Cohort 2"
+        class="form-button"
+        id="load-cohort-2"
+      />
+    </form>
+    <script>
+      function nameSelection(names) {
+        const randomIndex = Math.floor(Math.random() * names.length);
+        return names[randomIndex];
+      }
+      function submitForm() {
+        const formInputs = document.querySelectorAll(".form-input");
+        let names = [];
+        formInputs.forEach((eachInput) => {
+          names.push(eachInput.value);
+        });
+        names = names.filter((nameInArray) => nameInArray.length > 0); // remove empty fields
+        const selectedName = nameSelection(names);
+        // console.log(selectedName); // need to display this selected name
+        const selectedNameDisplay = document.getElementById(
+          "selected-individual"
+        );
+        selectedNameDisplay.innerText = selectedName;
+      }
+      function addFormInput() {
+        const newInputBox = document.createElement("input");
+        newInputBox.type = "text";
+        newInputBox.classList.add("form-input");
+        newInputBox.addEventListener("keypress", (e) => {
+          if (e.key === "Enter" && e.shiftKey === true) {
+            e.preventDefault();
+            submitForm();
+          } else if (e.key === "Enter") {
+            e.preventDefault();
+            addFormInput();
+          }
+        });
+        mainFormInputs.appendChild(document.createElement("br"));
+        mainFormInputs.appendChild(newInputBox);
+      }
+      const formInputs = document.querySelectorAll(".form-input");
+      const mainFormInputs = document.getElementById("main-form-inputs");
+      const submitButton = document.getElementById("form-submit");
+      const addButton = document.getElementById("form-add-input");
+      const resetButton = document.getElementById("form-reset");
+      const form = document.getElementById("main-form");
+      submitButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        submitForm();
+      });
+      addButton.addEventListener("click", (e) => {
+        addFormInput();
+      });
+      formInputs.forEach((eachInput) => {
+        eachInput.addEventListener("keypress", (e) => {
+          if (e.key === "Enter" && e.shiftKey === true) {
+            e.preventDefault();
+            submitForm();
+          } else if (e.key === "Enter") {
+            e.preventDefault();
+            addFormInput();
+          }
+        });
+      });
+      resetButton.addEventListener("click", (e) => {
+        let formInputs = document.querySelectorAll(".form-input");
+        let mainFormInputs = document.getElementById("main-form-inputs");
+        let brs = mainFormInputs.getElementsByTagName("br");
+        while (formInputs.length > 2) {
+          brs[0].parentNode.removeChild(brs[0]);
+          formInputs[0].parentNode.removeChild(formInputs[0]);
+          formInputs = document.querySelectorAll(".form-input");
+          mainFormInputs = document.getElementById("main-form-inputs");
+          brs = mainFormInputs.getElementsByTagName("br");
+        }
+        const selectedNameDisplay = document.getElementById(
+          "selected-individual"
+        );
+        selectedNameDisplay.innerText = "";
+      });
+      //////////=====================////////////
+      const namesCohort2 = [
+        "Kobi",
+        "Sohail",
+        "Mo",
+        "Kasia",
+        "Sang",
+        "Ed",
+        "Luke",
+        "Nathan",
+        "Gurpartap",
+        "Bledar",
+        "Adnan",
+        "Sean",
+        "Berkan",
+      ];
+      const loadCohort2Button = document.getElementById("load-cohort-2");
+      loadCohort2Button.addEventListener("click", (e) => {
+        const numberOfNamesToAdd = namesCohort2.length;
+        let formInputs = document.querySelectorAll(".form-input");
+        // formInputs[0].value = namesCohort2[0];
+        formInputs[0].value = namesCohort2[0];
+        formInputs[1].value = namesCohort2[1];
+        for (
+          let nameToAddIndex = 2;
+          nameToAddIndex < numberOfNamesToAdd;
+          nameToAddIndex++
+        ) {
+          addFormInput();
+          formInputs = document.querySelectorAll(".form-input");
+          formInputs[nameToAddIndex].value = namesCohort2[nameToAddIndex];
+        }
+      });
+    </script>
+  </body>
 </html>
